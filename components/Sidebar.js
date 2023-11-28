@@ -11,7 +11,7 @@ const Sidebar = () => {
   return (
     <View className="p-2 flex flex-col h-screen bg-[#202123]">
       <StatusBar style="light" />
-      <View className="flex-1 mt-4">
+      <View className="flex-1">
         <View>
           {/* New Chat */}
           <NewChat />

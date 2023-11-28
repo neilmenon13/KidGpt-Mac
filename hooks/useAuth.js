@@ -21,59 +21,45 @@ const useAuth = () => {
         webClientId: '949845395948-l6e6d9jplam5ltifu1quvd0c4i36psse.apps.googleusercontent.com',
     });
 
-    const checkLocalUser = async () => {
-        try {
-            const userJSON = await AsyncStorage.getItem("@user");
-            const userData = userJSON ? JSON.parse(userJSON) : null;
-            const photoUrlJSON = await AsyncStorage.getItem("@photoUrl");
-            const photoUrlData = photoUrlJSON ? JSON.parse(photoUrlJSON) : null;
-            const emailJSON = await AsyncStorage.getItem("@email");
-            const emailData = emailJSON ? JSON.parse(emailJSON) : null;
-            setUserInfo(userData);
-            setPhotoUrl(photoUrlData)  
-            setEmail(emailData)  
-        } catch(e) {
-            console.log(e.message)
-        }
-    }
-
-    const signOut = async () => {
-        try {
-            console.log("Chat")
-            await AsyncStorage.clear();
-            setPhotoUrl("");
-            setUserInfo("");
-            navigation.navigate("Log In");
-        } catch(e) {
-            console.log(e.message)
-        }
-    }
-
     React.useEffect(() => {
-        if (response?.type == 'success') {
-            const { id_token } = response.params;
-            const credential = GoogleAuthProvider.credential(id_token);
-            signInWithCredential(auth, credential);
-        }
+        handleSignInWithGoogle();
     }, [response])
 
-    React.useEffect(() => {
-        checkLocalUser();
-        const unsub = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                setUserInfo(user);
-                setPhotoUrl(user.photoURL);
-                setEmail(user.email);
-                await AsyncStorage.setItem("@user", JSON.stringify(user));
-                await AsyncStorage.setItem("@photoUrl", JSON.stringify(user.photoURL));
-                await AsyncStorage.setItem("@email", JSON.stringify(user.email));
+    async function handleSignInWithGoogle() {
+        const user = await AsyncStorage.getItem("@user")
+
+        if(!user) {
+            if (response?.type === "success"){
+                await getUserInfo(response.authentication.accessToken)
             }
-        });
+        } else {
+            setUserInfo(JSON.parse(user))
+            setPhotoUrl(JSON.parse(user.photoURL))
+            setEmail(JSON.parse(user.email))
+        }
+    }
 
-        return () => unsub();
-    }, [])
+    const getUserInfo = async (token) => {
+        if(!token) return;
+        try {
+            const response = await fetch(
+                "https://www.googleapis.com/userinfo/v2/me", 
+                {
+                    headers: { Authorization: `Bearer ${token}`}
+                }
+            );
 
-    return { userInfo, email, photoUrl, promptAsync, signOut, response };
+            const user = await response.json();
+            await AsyncStorage.setItem("@user", JSON.stringify(user));
+            setUserInfo(user)
+            setEmail(user.email)
+            setPhotoUrl(user.photoURL)
+        } catch (e) {
+            console.error(e.message);
+        }
+    }
+
+    return { userInfo, email, photoUrl, promptAsync, response };
 }
 
 export default useAuth;

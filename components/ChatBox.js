@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import { BoltIcon, ExclamationTriangleIcon, SunIcon, Path } from '@heroicons/react/24/outline';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,7 +8,7 @@ const ChatBox = () => {
   return (
         <View className="flex-col items-center justify-center h-screen px-2">
           <Text className="text-5xl font-bold mb-4">KidGPT</Text>
-          <View className='flex-col space-x-2'>
+          <View className={`${Platform.OS == "web" ? "flex-row" : "flex-col"} space-x-2`}>
             <View className="xs:flex-shrink">
               <View className="flex flex-col items-center justify-center mb-5  ">
                 <Ionicons name="ios-sunny" size={34.5} color="black" />

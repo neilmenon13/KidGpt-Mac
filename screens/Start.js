@@ -22,6 +22,7 @@ const Start = () => {
 
   return (
     <View className="flex-1 items-center justify-center bg-[#343541]">
+      {JSON.stringify(userInfo)}
         <Text className="font-semibold text-6xl text-white">KidGPT</Text>
         <TouchableOpacity className="rounded-3xl mt-12 px-14 py-3 bg-[#f4a261] flex-row" onPress={() => promptAsync()}>
           <AntDesign name="google" size={32} color="white" />
