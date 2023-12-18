@@ -16,7 +16,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Home'>
-        <Stack.Screen name="Log In" component={Start} />
+        <Stack.Screen name="Login" component={Start} />
         <Stack.Screen name="Chat" component={Chat} options={{ headerShown: false, }} />
       </Stack.Navigator>
     </NavigationContainer>

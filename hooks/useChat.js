@@ -10,7 +10,7 @@ const useChat = () => {
 
     const createNewChat = async () => {
         const doc = await addDoc(
-          collection(db, 'user', email, "chats"), {
+          collection(db, 'users', email, "chats"), {
             messages: [],
             userId: email,
             createdAt: serverTimestamp(),
