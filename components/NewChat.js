@@ -18,7 +18,7 @@ const NewChat = () => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <Pressable style={[styles.button, cursorStyle, isHovered ? styles.hover : ""]} className={`flex-row border-[1px] border-gray-700 rounded-lg px-5 py-3 text-sm items-center justify-center space-x-2 ${Platform.OS === "web" ? "" : "mt-7"}`} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} onPress={async () => AsyncStorage.clear().catch(e => console.log(e))}>
+    <Pressable style={[styles.button, cursorStyle, isHovered ? styles.hover : ""]} className={`flex-row border-[1px] border-gray-700 rounded-lg px-5 py-3 text-sm items-center justify-center space-x-2 ${Platform.OS === "web" ? "" : "mt-7"}`} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} onPress={createNewChat}>
         <Feather name="plus" size={24} color="#d1d5db" />
         <Text className="text-gray-300">New Chat</Text>
     </Pressable>

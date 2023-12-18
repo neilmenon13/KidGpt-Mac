@@ -8,6 +8,7 @@ import { auth } from '../firebaseConfig';
 import * as Google from 'expo-auth-session/providers/google';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { typeOf } from 'react-is';
 
 const useAuth = () => {
     const navigation = useNavigation();
@@ -20,6 +21,11 @@ const useAuth = () => {
         androidClientId: '949845395948-2tnlagaoo85996r2n2j6k0adep5ji1nf.apps.googleusercontent.com',
         webClientId: '949845395948-l6e6d9jplam5ltifu1quvd0c4i36psse.apps.googleusercontent.com',
     });
+
+    const signOut = async () => {
+        await AsyncStorage.clear()
+        navigation.navigate('Login')
+    }
 
     React.useEffect(() => {
         handleSignInWithGoogle();
@@ -53,18 +59,18 @@ const useAuth = () => {
 
             const user = await response.json();
             console.log(user)
-            await AsyncStorage.setItem("@user", JSON.parse(user));
-            await AsyncStorage.setItem("@picture", JSON.stringify(user.picture));
-            await AsyncStorage.setItem("@email", JSON.parse(user.email))
-            setUserInfo(JSON.parse(user))
-            setEmail(JSON.parse(user.email))
-            setPhotoUrl(JSON.stringify(user.picture))
+            await AsyncStorage.setItem("@user", user);
+            await AsyncStorage.setItem("@picture", user.picture);
+            await AsyncStorage.setItem("@email", user.email)
+            setUserInfo(user)
+            setEmail(user.email)
+            setPhotoUrl(user.picture)
         } catch (error) {
             console.log(error);
         }
     }
 
-    return { userInfo, email, photoUrl, promptAsync, response };
+    return { userInfo, email, photoUrl, promptAsync, response, signOut };
 }
 
 export default useAuth;
